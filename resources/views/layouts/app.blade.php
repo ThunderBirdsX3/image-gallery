@@ -31,7 +31,10 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        @auth
+                            <li><a class="nav-link" href="{{ route('home') }}">Home</a></li>
+                            <li><a class="nav-link" href="{{ route('gallery.index') }}">Gallery</a></li>
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->

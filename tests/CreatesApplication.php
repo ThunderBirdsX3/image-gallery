@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use Artisan;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Console\Kernel;
 
@@ -19,6 +21,8 @@ trait CreatesApplication
         $app->make(Kernel::class)->bootstrap();
 
         Hash::driver('bcrypt')->setRounds(4);
+
+        Artisan::call('migrate:fresh');
 
         return $app;
     }
