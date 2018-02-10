@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Validator;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 use App\User;
 use App\Gallery;
@@ -18,7 +19,7 @@ class GalleryController extends Controller
      */
     public function index()
     {
-        $galleries = User::find(1)->Gallery()->select('src')->get();
+        $galleries = User::find(1)->Gallery()->select('id', 'src')->get();
         return view('gallery.index', compact('galleries'));
     }
 
@@ -84,25 +85,17 @@ class GalleryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Gallery  $gallery
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Gallery $gallery)
     {
-        //
+        Storage::disk('public')->delete($gallery->file_path);
+
+        $gallery->delete();
+
+        return response()->json(['message' => 'OK'], 200);
     }
 }

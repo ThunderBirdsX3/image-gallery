@@ -19,4 +19,4 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::apiResource('gallery', 'GalleryController');
+Route::apiResource('gallery', 'GalleryController', ['except' => ['update']]);

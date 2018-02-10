@@ -7,8 +7,26 @@
         </div>
 
         <div class="upload-image-thumbnails">
-            <div v-for="image in images" class="upload-image-thumbnail">
-                <img v-if="image.src != null" v-bind:src="url + '/' + image.src" class="show">
+            <div v-for="(image, index) in images" class="upload-image-thumbnail" v-bind:class="{ 'uploaded': image.src != null }">
+
+                <div class="btn-group" v-if="image.src != null">
+                    <a v-bind:href="url + '/' + image.src" v-bind:data-lightbox="image.src" class="btn btn-primary btn-sm">
+                        <i class="material-icons">zoom_in</i>
+                    </a>
+                    <button type="button" class="btn btn-danger btn-sm" v-on:click="removeImage(image.id, index)">
+                        <i class="material-icons">delete</i>
+                    </button>
+                </div>
+                <div class="btn-group" v-else>
+                    <button type="button" class="btn btn-danger btn-sm" v-on:click="removeImage(null, index)">
+                        <i class="material-icons">delete</i>
+                    </button>
+                </div>
+
+
+                <div v-if="image.src != null">
+                    <img v-bind:src="url + '/' + image.src" class="show">
+                </div>
             </div>
         </div>
     </div>
@@ -119,18 +137,22 @@
                 e.target.value = '';
             },
 
-            fileDelete: function(e, key){
-                Vue.delete(this.files, key);
-                Vue.delete(this.image, key);
-            },
-            fileView: function(e, key){
-                e.preventDefault(); e.stopPropagation();
+            removeImage: function(id, index){
+                if (id != null) {
+                    axios.delete(route('gallery.destroy', id))
+                    .then(response => {
+                        Vue.delete(this.images, index);
+                    })
+                    .catch(error => console.error(error));
+                } else {
+                    Vue.delete(this.images, index);
+                }
             }
         }
     }
 </script>
 
-<style lang="css">
+<style lang="scss">
     .upload-image{
         padding: 5px;
         cursor: pointer;
@@ -138,7 +160,9 @@
         border-radius: 5px;
         background-color: rgba(255, 153, 0, 0.6);
     }
-    .upload-image.dragover{}
+    .upload-image.dragover{
+        filter: brightness(30);
+    }
 
     .upload-image > div.form {
         min-height: 200px;
@@ -156,10 +180,10 @@
         width: 100%;
     }
 
-    .upload-image-thumbnails{
+    .upload-image-thumbnails {
         margin-bottom: 1em;
     }
-    .upload-image-thumbnail{
+    .upload-image-thumbnail {
         border-radius: 2.5px;
         position:relative;
         width:20%;
@@ -167,35 +191,49 @@
         overflow: hidden;
         margin:10px;
         display:inline-block;
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: whitesmoke;
+
+    }
+
+    .upload-image-thumbnail div.btn-group {
+        top: 40%;
+        text-align: center;
+        left: 0;
+        right: 0;
+        position: absolute;
+        display: inline-block;
+        z-index: 999;
+        opacity: 0;
     }
 
     .upload-image-thumbnail img{
         position: absolute;
-        top:50%;
+        top: 50%;
         left: 50%;
-        /*min-width: 100%;*/
         max-width: 100%;
-        /*min-height: 100%;*/
         max-height: 100%;
-        /*max-height: 150%;*/
         opacity: 0;
         transform: translateX(-50%) translateY(-50%);
         transition: 1s opacity;
+        z-index: 99;
     }
+    .upload-image-thumbnail:hover {
+        img {
+            filter: blur(2px);
+        }
+
+        div.btn-group {
+            opacity: 1;
+        }
+    }
+
     .upload-image-thumbnail img.show{
         opacity: 1;
-    }
-    .upload-image-thumbnail img:hover{
-        filter: blur(2px);
     }
     .upload-image-thumbnail.bad-size img{
         filter: grayscale(100%);
     }
-    .upload-image-thumbnail.uploaded img{
-        opacity: 0.1;
-        filter: green;
-    }
+
     .upload-image-thumbnail span{
         position: absolute;
         top: -5px;
