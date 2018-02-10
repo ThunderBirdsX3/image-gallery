@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Validator;
+use Auth, Validator;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-use App\User;
 use App\Gallery;
 
 class GalleryController extends Controller
@@ -19,7 +18,7 @@ class GalleryController extends Controller
      */
     public function index()
     {
-        $galleries = User::find(1)->Gallery()->select('id', 'src')->get();
+        $galleries = Auth::user()->Gallery()->select('id', 'src')->get();
         return view('gallery.index', compact('galleries'));
     }
 
@@ -45,7 +44,7 @@ class GalleryController extends Controller
         $file_path = "$file_path[0]/$file_path[1]/$file_path[2]/";
         $file_path = $request->image->store($file_path, 'public');
 
-        User::find(1)->Gallery()->create([
+        Auth::user()->Gallery()->create([
             'src' => $src,
             'file_path' => $file_path,
             'file_type' => $file_type,
