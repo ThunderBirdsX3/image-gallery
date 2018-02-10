@@ -14,11 +14,11 @@ use App\Gallery;
 class FileUploadTest extends TestCase
 {
     /**
-     * A basic test example.
+     * Test upload, view and delete file.
      *
      * @return void
      */
-    public function testExample()
+    public function testUploadFile()
     {
         $user = factory(User::class)->create();
         $user2 = factory(User::class)->create();

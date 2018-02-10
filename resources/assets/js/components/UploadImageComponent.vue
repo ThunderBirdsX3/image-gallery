@@ -12,7 +12,7 @@
             <div v-for="(image, index) in images" class="col-md-4">
 
                 <div class="upload-image-thumbnail">
-                    {{ index }}
+                    
                     <div class="btn-group" v-if="image.src != null">
                         <a v-bind:href="url + '/' + image.src" v-bind:data-lightbox="image.src" class="btn btn-info btn-sm">
                             <i class="material-icons">zoom_in</i>
