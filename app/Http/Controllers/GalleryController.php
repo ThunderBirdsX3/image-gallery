@@ -102,6 +102,8 @@ class GalleryController extends Controller
      */
     public function destroy(Gallery $gallery)
     {
+        $this->authorize('destroy', $gallery);
+
         Storage::delete($gallery->file_path);
 
         $gallery->delete();

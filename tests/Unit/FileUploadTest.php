@@ -37,6 +37,8 @@ class FileUploadTest extends TestCase
         $this->actingAs($user)->get('/gallery/worg_src')
         ->assertStatus(404);
 
+        $this->actingAs($user2)->delete('/gallery/' . $response->original['id'])
+        ->assertStatus(403);
         $this->actingAs($user)->delete('/gallery/' . $response->original['id'])
         ->assertStatus(200);
 
