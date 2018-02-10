@@ -47410,7 +47410,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(64)
+  __webpack_require__(41)
 }
 var normalizeComponent = __webpack_require__(46)
 /* script */
@@ -47455,8 +47455,46 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 41 */,
-/* 42 */,
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(42);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(44)("2e155048", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-57c3577a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./UploadImageComponent.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-57c3577a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./UploadImageComponent.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(43)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n.upload-image {\n  padding: 5px;\n  cursor: pointer;\n  min-height: 200px;\n  border-radius: 10px;\n  border: 5px dashed gray;\n  text-align: center;\n  color: gray;\n}\n.upload-image i {\n    font-size: 100pt;\n}\n.upload-image:hover {\n  border-color: black;\n}\n.upload-image > div.form {\n  min-height: 200px;\n  position: relative;\n}\n.upload-image > div.form > input {\n  display: none;\n}\n.upload-image > div.form > div.text-center {\n  text-align: center;\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n}\n.col-md-4 {\n  padding: 0;\n}\n.upload-image-thumbnails {\n  margin: 20px 0;\n}\n.upload-image-thumbnail {\n  border-radius: 5px;\n  overflow: hidden;\n  margin: 5px;\n  height: 200px;\n  background-color: whitesmoke;\n}\n.upload-image-thumbnail div.btn-group {\n  top: 40%;\n  text-align: center;\n  left: 0;\n  right: 0;\n  position: absolute;\n  display: inline-block;\n  z-index: 999;\n  opacity: 0;\n}\n.upload-image-thumbnail img {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  max-width: 95%;\n  max-height: 95%;\n  opacity: 0;\n  -webkit-transform: translateX(-50%) translateY(-50%);\n          transform: translateX(-50%) translateY(-50%);\n  -webkit-transition: 1s opacity;\n  transition: 1s opacity;\n  z-index: 99;\n}\n.upload-image-thumbnail:hover img {\n  -webkit-filter: blur(2px);\n          filter: blur(2px);\n}\n.upload-image-thumbnail:hover div.btn-group {\n  opacity: 1;\n}\n.upload-image-thumbnail img.show {\n  opacity: 1;\n}\n.upload-image-thumbnail.bad-size img {\n  -webkit-filter: grayscale(100%);\n          filter: grayscale(100%);\n}\n.upload-image-thumbnail span {\n  position: absolute;\n  top: -5px;\n  left: 0px;\n  z-index: 100;\n  padding: 0px 1px;\n  border-radius: 2px;\n  background-color: grey;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
 /* 43 */
 /***/ (function(module, exports) {
 
@@ -47948,6 +47986,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['galleries'],
@@ -47996,7 +48040,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         });
     },
     methods: {
-        _xhr: function _xhr(file, index) {
+        uploadFile: function uploadFile(file, index) {
             var _this2 = this;
 
             var image = new FormData();
@@ -48049,7 +48093,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     this.images[this.index]['bad_type'] = true;
                     console.log('bad_type');
                 } else {
-                    this._xhr(files[i], this.index);
+                    this.uploadFile(files[i], this.index);
                 }
 
                 this.index++;
@@ -48091,81 +48135,83 @@ var render = function() {
     _vm._v(" "),
     _c(
       "div",
-      { staticClass: "upload-image-thumbnails" },
+      { staticClass: "upload-image-thumbnails row" },
       _vm._l(_vm.images, function(image, index) {
-        return _c(
-          "div",
-          {
-            staticClass: "upload-image-thumbnail",
-            class: { uploaded: image.src != null }
-          },
-          [
-            image.src != null
-              ? _c("div", { staticClass: "btn-group" }, [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "btn btn-primary btn-sm",
-                      attrs: {
-                        href: _vm.url + "/" + image.src,
-                        "data-lightbox": image.src
-                      }
-                    },
-                    [
-                      _c("i", { staticClass: "material-icons" }, [
-                        _vm._v("zoom_in")
-                      ])
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger btn-sm",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          _vm.removeImage(image.id, index)
+        return _c("div", { staticClass: "col-md-4" }, [
+          _c(
+            "div",
+            {
+              staticClass: "upload-image-thumbnail",
+              class: { uploaded: image.src != null }
+            },
+            [
+              image.src != null
+                ? _c("div", { staticClass: "btn-group" }, [
+                    _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-info btn-sm",
+                        attrs: {
+                          href: _vm.url + "/" + image.src,
+                          "data-lightbox": image.src
                         }
-                      }
-                    },
-                    [
-                      _c("i", { staticClass: "material-icons" }, [
-                        _vm._v("delete")
-                      ])
-                    ]
-                  )
-                ])
-              : _c("div", { staticClass: "btn-group" }, [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-danger btn-sm",
-                      attrs: { type: "button" },
-                      on: {
-                        click: function($event) {
-                          _vm.removeImage(null, index)
+                      },
+                      [
+                        _c("i", { staticClass: "material-icons" }, [
+                          _vm._v("zoom_in")
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger btn-sm",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.removeImage(image.id, index)
+                          }
                         }
-                      }
-                    },
-                    [
-                      _c("i", { staticClass: "material-icons" }, [
-                        _vm._v("delete")
-                      ])
-                    ]
-                  )
-                ]),
-            _vm._v(" "),
-            image.src != null
-              ? _c("div", [
-                  _c("img", {
-                    staticClass: "show",
-                    attrs: { src: _vm.url + "/" + image.src }
-                  })
-                ])
-              : _vm._e()
-          ]
-        )
+                      },
+                      [
+                        _c("i", { staticClass: "material-icons" }, [
+                          _vm._v("delete")
+                        ])
+                      ]
+                    )
+                  ])
+                : _c("div", { staticClass: "btn-group" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger btn-sm",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            _vm.removeImage(null, index)
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "material-icons" }, [
+                          _vm._v("delete")
+                        ])
+                      ]
+                    )
+                  ]),
+              _vm._v(" "),
+              image.src != null
+                ? _c("div", [
+                    _c("img", {
+                      staticClass: "show",
+                      attrs: { src: _vm.url + "/" + image.src }
+                    })
+                  ])
+                : _vm._e()
+            ]
+          )
+        ])
       })
     )
   ])
@@ -48179,6 +48225,10 @@ var staticRenderFns = [
       "div",
       { staticClass: "form", attrs: { id: "upload_image_form" } },
       [
+        _c("i", { staticClass: "material-icons" }, [_vm._v("cloud_upload")]),
+        _vm._v(" "),
+        _c("h4", [_vm._v("Drop files here or click to choose files.")]),
+        _vm._v(" "),
         _c("input", {
           attrs: {
             type: "file",
@@ -48205,60 +48255,6 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */,
-/* 56 */,
-/* 57 */,
-/* 58 */,
-/* 59 */,
-/* 60 */,
-/* 61 */,
-/* 62 */,
-/* 63 */,
-/* 64 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(65);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(44)("2e155048", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-57c3577a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./UploadImageComponent.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-57c3577a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../node_modules/sass-loader/lib/loader.js!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./UploadImageComponent.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 65 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(43)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n.upload-image {\n  padding: 5px;\n  cursor: pointer;\n  min-height: 200px;\n  border-radius: 5px;\n  background-color: rgba(255, 153, 0, 0.6);\n}\n.upload-image.dragover {\n  -webkit-filter: brightness(30);\n          filter: brightness(30);\n}\n.upload-image > div.form {\n  min-height: 200px;\n  position: relative;\n}\n.upload-image > div.form > input {\n  display: none;\n}\n.upload-image > div.form > div.text-center {\n  text-align: center;\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n}\n.upload-image-thumbnails {\n  margin-bottom: 1em;\n}\n.upload-image-thumbnail {\n  border-radius: 2.5px;\n  position: relative;\n  width: 20%;\n  padding: 14.7%;\n  overflow: hidden;\n  margin: 10px;\n  display: inline-block;\n  background-color: whitesmoke;\n}\n.upload-image-thumbnail div.btn-group {\n  top: 40%;\n  text-align: center;\n  left: 0;\n  right: 0;\n  position: absolute;\n  display: inline-block;\n  z-index: 999;\n  opacity: 0;\n}\n.upload-image-thumbnail img {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  max-width: 100%;\n  max-height: 100%;\n  opacity: 0;\n  -webkit-transform: translateX(-50%) translateY(-50%);\n          transform: translateX(-50%) translateY(-50%);\n  -webkit-transition: 1s opacity;\n  transition: 1s opacity;\n  z-index: 99;\n}\n.upload-image-thumbnail:hover img {\n  -webkit-filter: blur(2px);\n          filter: blur(2px);\n}\n.upload-image-thumbnail:hover div.btn-group {\n  opacity: 1;\n}\n.upload-image-thumbnail img.show {\n  opacity: 1;\n}\n.upload-image-thumbnail.bad-size img {\n  -webkit-filter: grayscale(100%);\n          filter: grayscale(100%);\n}\n.upload-image-thumbnail span {\n  position: absolute;\n  top: -5px;\n  left: 0px;\n  z-index: 100;\n  padding: 0px 1px;\n  border-radius: 2px;\n  background-color: grey;\n}\n", ""]);
-
-// exports
-
 
 /***/ })
 /******/ ]);

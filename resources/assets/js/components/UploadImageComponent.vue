@@ -2,31 +2,37 @@
     <div>
         <div class="upload-image" v-bind:class="{ 'dragover': onDragover }">
             <div class="form" id="upload_image_form">
+                <i class="material-icons">cloud_upload</i>
+                <h4>Drop files here or click to choose files.</h4>
                 <input type="file" id="upload_image_form_input" multiple accept="image/*" />
             </div>
         </div>
 
-        <div class="upload-image-thumbnails">
-            <div v-for="(image, index) in images" class="upload-image-thumbnail" v-bind:class="{ 'uploaded': image.src != null }">
+        <div class="upload-image-thumbnails row">
+            <div v-for="(image, index) in images" class="col-md-4">
 
-                <div class="btn-group" v-if="image.src != null">
-                    <a v-bind:href="url + '/' + image.src" v-bind:data-lightbox="image.src" class="btn btn-primary btn-sm">
-                        <i class="material-icons">zoom_in</i>
-                    </a>
-                    <button type="button" class="btn btn-danger btn-sm" v-on:click="removeImage(image.id, index)">
-                        <i class="material-icons">delete</i>
-                    </button>
-                </div>
-                <div class="btn-group" v-else>
-                    <button type="button" class="btn btn-danger btn-sm" v-on:click="removeImage(null, index)">
-                        <i class="material-icons">delete</i>
-                    </button>
+                <div class="upload-image-thumbnail" v-bind:class="{ 'uploaded': image.src != null }">
+
+                    <div class="btn-group" v-if="image.src != null">
+                        <a v-bind:href="url + '/' + image.src" v-bind:data-lightbox="image.src" class="btn btn-info btn-sm">
+                            <i class="material-icons">zoom_in</i>
+                        </a>
+                        <button type="button" class="btn btn-danger btn-sm" v-on:click="removeImage(image.id, index)">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </div>
+                    <div class="btn-group" v-else>
+                        <button type="button" class="btn btn-danger btn-sm" v-on:click="removeImage(null, index)">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </div>
+
+                    <div v-if="image.src != null">
+                        <img v-bind:src="url + '/' + image.src" class="show">
+                    </div>
+
                 </div>
 
-
-                <div v-if="image.src != null">
-                    <img v-bind:src="url + '/' + image.src" class="show">
-                </div>
             </div>
         </div>
     </div>
@@ -73,7 +79,7 @@
             });
         },
         methods: {
-            _xhr: function(file, index){
+            uploadFile: function(file, index){
 
                 let image = new FormData();
                 image.append('image', file);
@@ -128,7 +134,7 @@
                         this.images[this.index]['bad_type'] = true;
                         console.log('bad_type');
                     } else {
-                        this._xhr(files[i], this.index);
+                        this.uploadFile(files[i], this.index);
                     }
 
                     this.index++;
@@ -157,11 +163,17 @@
         padding: 5px;
         cursor: pointer;
         min-height: 200px;
-        border-radius: 5px;
-        background-color: rgba(255, 153, 0, 0.6);
+        border-radius: 10px;
+        border: 5px dashed gray;
+        text-align: center;
+        color: gray;
+
+        i {
+            font-size: 100pt;
+        }
     }
-    .upload-image.dragover{
-        filter: brightness(30);
+    .upload-image:hover {
+        border-color: black;
     }
 
     .upload-image > div.form {
@@ -180,17 +192,19 @@
         width: 100%;
     }
 
-    .upload-image-thumbnails {
-        margin-bottom: 1em;
+    .col-md-4 {
+        padding: 0;
     }
+
+    .upload-image-thumbnails {
+        margin: 20px 0;
+    }
+
     .upload-image-thumbnail {
-        border-radius: 2.5px;
-        position:relative;
-        width:20%;
-        padding:14.7%;
+        border-radius: 5px;
         overflow: hidden;
-        margin:10px;
-        display:inline-block;
+        margin: 5px;
+        height: 200px;
         background-color: whitesmoke;
 
     }
@@ -210,8 +224,8 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        max-width: 100%;
-        max-height: 100%;
+        max-width: 95%;
+        max-height: 95%;
         opacity: 0;
         transform: translateX(-50%) translateY(-50%);
         transition: 1s opacity;

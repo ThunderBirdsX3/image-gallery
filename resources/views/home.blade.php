@@ -33,7 +33,7 @@
 
                     <div class="card-body">
 
-                        @if ($gallery->count())
+                        @if (! $gallery->isEmpty())
                             <table class="table">
                                 <thead>
                                     <tr>

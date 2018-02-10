@@ -12,18 +12,20 @@ use App\Gallery;
 class GalleryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display gallery page.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
+        // Get all galleries of user, For pass it to Vuejs.
         $galleries = Auth::user()->Gallery()->select('id', 'src')->get();
+
         return view('gallery.index', compact('galleries'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a file to storage, And save to database.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -34,12 +36,18 @@ class GalleryController extends Controller
             'image' => 'required|mimetypes:image/jpeg,image/png|max:10000'
         ]);
 
+        // Generate random string for src.
         $src = null;
         do { $src = $this->generateSrc(); } while (is_null($src));
 
         $file_size = $request->image->getClientSize();
         $file_type = $request->image->getClientMimeType();
 
+        /**
+         * Store file to sub folder.
+         * หลักการเกี่ยวกับการเกี่ยวไฟล์ ถ้าเก็บไว้ใน Folder เดียวกันเยอะๆ
+         * เวลาต้องการเข้าถึงไฟล์ จะทำให้เข้าถึงได้ช้า
+         */
         $file_path = str_split($request->image->hashName(), 2);
         $file_path = "$file_path[0]/$file_path[1]/$file_path[2]/";
         $file_path = $request->image->store($file_path, 'public');
@@ -55,7 +63,7 @@ class GalleryController extends Controller
     }
 
     /**
-     * This function generate link and check, It is unique in database.
+     * This function generate src and check, It is unique in database.
      *
      * @return null If $src is duplicate.
      * @return string $src.
@@ -69,7 +77,7 @@ class GalleryController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Reponse file or 404.
      *
      * @param  string  $src
      * @return \Illuminate\Http\Response
@@ -84,7 +92,7 @@ class GalleryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove file from storage, Then delete data from database.
      *
      * @param  \App\Gallery  $gallery
      * @return \Illuminate\Http\Response
