@@ -50,7 +50,7 @@ class GalleryController extends Controller
          */
         $file_path = str_split($request->image->hashName(), 2);
         $file_path = "$file_path[0]/$file_path[1]/$file_path[2]/";
-        $file_path = $request->image->store($file_path, 'public');
+        $file_path = $request->image->store($file_path);
 
         $gallery = Auth::user()->Gallery()->create([
             'src' => $src,
@@ -91,7 +91,7 @@ class GalleryController extends Controller
 
         return is_null($gallery)
             ? response()->json(['massage' => 'Not Found.'], 404)
-            : response()->file(storage_path("app/public/$gallery->file_path"));
+            : response(Storage::get($gallery->file_path));
     }
 
     /**
@@ -102,7 +102,7 @@ class GalleryController extends Controller
      */
     public function destroy(Gallery $gallery)
     {
-        Storage::disk('public')->delete($gallery->file_path);
+        Storage::delete($gallery->file_path);
 
         $gallery->delete();
 
