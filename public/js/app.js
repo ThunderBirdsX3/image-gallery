@@ -47489,7 +47489,7 @@ exports = module.exports = __webpack_require__(43)(false);
 
 
 // module
-exports.push([module.i, "\n.upload-image {\n  padding: 5px;\n  cursor: pointer;\n  min-height: 200px;\n  border-radius: 10px;\n  border: 5px dashed gray;\n  text-align: center;\n  color: gray;\n}\n.upload-image i {\n    font-size: 100pt;\n}\n.upload-image:hover {\n  border-color: black;\n}\n.upload-image > div.form {\n  min-height: 200px;\n  position: relative;\n}\n.upload-image > div.form > input {\n  display: none;\n}\n.upload-image > div.form > div.text-center {\n  text-align: center;\n  position: absolute;\n  bottom: 0;\n  width: 100%;\n}\n.col-md-4 {\n  padding: 0;\n}\n.upload-image-thumbnails {\n  margin: 20px 0;\n}\n.upload-image-thumbnail {\n  border-radius: 5px;\n  overflow: hidden;\n  margin: 5px;\n  height: 200px;\n  background-color: whitesmoke;\n}\n.upload-image-thumbnail div.btn-group {\n  top: 40%;\n  text-align: center;\n  left: 0;\n  right: 0;\n  position: absolute;\n  display: inline-block;\n  z-index: 999;\n  opacity: 0;\n}\n.upload-image-thumbnail img {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  max-width: 95%;\n  max-height: 95%;\n  opacity: 0;\n  -webkit-transform: translateX(-50%) translateY(-50%);\n          transform: translateX(-50%) translateY(-50%);\n  -webkit-transition: 1s opacity;\n  transition: 1s opacity;\n  z-index: 99;\n}\n.upload-image-thumbnail:hover img {\n  -webkit-filter: blur(2px);\n          filter: blur(2px);\n}\n.upload-image-thumbnail:hover div.btn-group {\n  opacity: 1;\n}\n.upload-image-thumbnail img.show {\n  opacity: 1;\n}\n.upload-image-thumbnail.bad-size img {\n  -webkit-filter: grayscale(100%);\n          filter: grayscale(100%);\n}\n.upload-image-thumbnail span {\n  position: absolute;\n  top: -5px;\n  left: 0px;\n  z-index: 100;\n  padding: 0px 1px;\n  border-radius: 2px;\n  background-color: grey;\n}\n", ""]);
+exports.push([module.i, "\n.upload-image {\n  padding: 5px;\n  cursor: pointer;\n  min-height: 200px;\n  border-radius: 10px;\n  border: 5px dashed gray;\n  text-align: center;\n  color: gray;\n}\n.upload-image i {\n    font-size: 100pt;\n}\n.upload-image:hover {\n  border-color: black;\n  color: black;\n}\n.upload-image > div.form {\n  min-height: 200px;\n  position: relative;\n}\n.upload-image > div.form > input {\n  display: none;\n}\n.col-md-4 {\n  padding: 0;\n}\n.upload-image-thumbnails {\n  margin: 20px 0;\n}\n.upload-image-thumbnail {\n  border-radius: 5px;\n  overflow: hidden;\n  margin: 5px;\n  height: 200px;\n  background-color: whitesmoke;\n}\n.upload-image-thumbnail div.btn-group {\n  top: 40%;\n  text-align: center;\n  left: 0;\n  right: 0;\n  position: absolute;\n  display: inline-block;\n  z-index: 999;\n  opacity: 0;\n}\n.upload-image-thumbnail img {\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  max-width: 95%;\n  max-height: 95%;\n  opacity: 0;\n  -webkit-transform: translateX(-50%) translateY(-50%);\n          transform: translateX(-50%) translateY(-50%);\n  -webkit-transition: 1s opacity;\n  transition: 1s opacity;\n  z-index: 99;\n}\n.upload-image-thumbnail:hover img {\n  -webkit-filter: blur(2px);\n          filter: blur(2px);\n}\n.upload-image-thumbnail:hover div.btn-group {\n  opacity: 1;\n}\n.upload-image-thumbnail img.show {\n  opacity: 1;\n}\n.upload-image-thumbnail.bad-size img {\n  -webkit-filter: grayscale(100%);\n          filter: grayscale(100%);\n}\n.upload-image-thumbnail span {\n  position: absolute;\n  top: -5px;\n  left: 0px;\n  z-index: 100;\n  padding: 0px 1px;\n  border-radius: 2px;\n  background-color: grey;\n}\n.bad-file {\n  padding-top: 15%;\n  color: red;\n  text-align: center;\n  vertical-align: middle;\n}\n.bad-file i {\n    font-size: 100px;\n}\n", ""]);
 
 // exports
 
@@ -47992,6 +47992,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['galleries'],
@@ -48083,7 +48091,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     'bad_type': false,
                     'uploaded': false,
                     'src': null,
-                    'percent': false
+                    'percent': false,
+                    'name': files[i].name
                 });
 
                 if (files[i].size * 0.001 > this.max_filesize) {
@@ -48201,14 +48210,36 @@ var render = function() {
                     )
                   ]),
               _vm._v(" "),
-              image.src != null
-                ? _c("div", [
-                    _c("img", {
-                      staticClass: "show",
-                      attrs: { src: _vm.url + "/" + image.src }
-                    })
+              image.bad_size
+                ? _c("div", { staticClass: "bad-file" }, [
+                    _c("i", { staticClass: "material-icons" }, [
+                      _vm._v("warning")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v("File size exceeded - " + _vm._s(image.name))
+                    ])
                   ])
-                : _vm._e()
+                : image.bad_type
+                  ? _c("div", { staticClass: "bad-file" }, [
+                      _c("i", { staticClass: "material-icons" }, [
+                        _vm._v("warning")
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "File type not supported - " + _vm._s(image.name)
+                        )
+                      ])
+                    ])
+                  : image.src != null
+                    ? _c("div", [
+                        _c("img", {
+                          staticClass: "show",
+                          attrs: { src: _vm.url + "/" + image.src }
+                        })
+                      ])
+                    : _vm._e()
             ]
           )
         ])
@@ -48230,12 +48261,7 @@ var staticRenderFns = [
         _c("h4", [_vm._v("Drop files here or click to choose files.")]),
         _vm._v(" "),
         _c("input", {
-          attrs: {
-            type: "file",
-            id: "upload_image_form_input",
-            multiple: "",
-            accept: "image/*"
-          }
+          attrs: { type: "file", id: "upload_image_form_input", multiple: "" }
         })
       ]
     )

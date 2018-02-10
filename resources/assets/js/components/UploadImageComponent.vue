@@ -4,7 +4,7 @@
             <div class="form" id="upload_image_form">
                 <i class="material-icons">cloud_upload</i>
                 <h4>Drop files here or click to choose files.</h4>
-                <input type="file" id="upload_image_form_input" multiple accept="image/*" />
+                <input type="file" id="upload_image_form_input" multiple />
             </div>
         </div>
 
@@ -27,7 +27,15 @@
                         </button>
                     </div>
 
-                    <div v-if="image.src != null">
+                    <div class="bad-file" v-if="image.bad_size">
+                        <i class="material-icons">warning</i>
+                        <p>File size exceeded - {{ image.name }}</p>
+                    </div>
+                    <div class="bad-file" v-else-if="image.bad_type">
+                        <i class="material-icons">warning</i>
+                        <p>File type not supported - {{ image.name }}</p>
+                    </div>
+                    <div v-else-if="image.src != null">
                         <img v-bind:src="url + '/' + image.src" class="show">
                     </div>
 
@@ -125,6 +133,7 @@
                         'uploaded': false,
                         'src': null,
                         'percent': false,
+                        'name': files[i].name,
                     })
 
                     if((files[i].size * 0.001) > this.max_filesize) {
@@ -174,6 +183,7 @@
     }
     .upload-image:hover {
         border-color: black;
+        color: black;
     }
 
     .upload-image > div.form {
@@ -183,13 +193,6 @@
 
     .upload-image > div.form > input {
         display: none;
-    }
-
-    .upload-image > div.form > div.text-center {
-        text-align: center;
-        position: absolute;
-        bottom: 0;
-        width: 100%;
     }
 
     .col-md-4 {
@@ -256,5 +259,16 @@
         padding: 0px 1px;
         border-radius: 2px;
         background-color: grey;
+    }
+
+    .bad-file {
+        padding-top: 15%;
+        color: red;
+        text-align: center;
+        vertical-align: middle;
+
+        i {
+            font-size: 100px
+        }
     }
 </style>
