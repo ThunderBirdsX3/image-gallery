@@ -1,27 +1,14 @@
 <template>
     <div>
         <div class="upload-image" v-bind:class="{ 'dragover': onDragover }">
-            <!-- <form v-bind:id="'upload_image_form-' + name" enctype="multipart/form-data"> -->
             <div class="form" id="upload_image_form">
                 <input type="file" id="upload_image_form_input" multiple accept="image/*" />
-                <!-- <div class="text-center">
-                    <button type="submit"
-                        v-bind:class="button_class"
-                        v-on:click="submit"
-                        v-bind:disabled="onUploading"
-                        v-html="button_html"></button>
-                </div> -->
             </div>
-            <!-- </form> -->
         </div>
 
         <div class="upload-image-thumbnails">
-            <div v-for="(value, key) in files" class="upload-image-thumbnail" v-on:click="fileView($event, key)"
-                    v-bind:class="{ 'uploaded': value.uploaded, 'bad-size': value.bad_size }" >
-                <span v-on:click="fileDelete($event, key)">
-                &#x2716;
-                </span>
-                <img v-bind:src="image[key]" v-bind:class="{ 'show': image[key]}">
+            <div v-for="image in images" class="upload-image-thumbnail">
+                <img v-if="image.src != null" v-bind:src="url + '/' + image.src" class="show">
             </div>
         </div>
     </div>
@@ -29,33 +16,15 @@
 
 <script>
     export default {
-        name: 'upload-image',
-        props: {
-            max_filesize: {
-                type: Number,
-                required: false,
-                default: 1000
-            },
-            button_html: {
-                type: String,
-                required: false,
-                default: 'Upload Images'
-            },
-            button_class: {
-                type: String,
-                required: false,
-                default: 'btn btn-primary btn-sm'
-            },
-        },
+        props: ['galleries'],
         data: function(){
             return {
+                url: route('gallery.index'),
                 form: null,
                 input: null,
-                index: 0,
-                total: 0,
-                files: [],
-                image: [],
-                batch: [],
+                max_filesize: 10000,
+                index: this.galleries.length,
+                images: this.galleries,
                 onDragover: false,
                 onUploading: false
             }
@@ -100,14 +69,11 @@
                     }.bind(this)
                 })
                 .then((response) => {
-                    // keys.forEach((key) => {
-                    //     Vue.set(this.files[key], 'uploaded', true);
-                    //
-                    //     this.total++;
-                    // });
-                    // delete this.batch;
 
-                    // this.$emit('upload-image-success', [formData, response]);
+                    this.images[index]['src'] = response.data.src;
+                    this.images[index]['uploaded'] = true;
+                    console.log(this.images);
+
                 })
                 .catch((error) => {
                     console.error(error);
@@ -127,21 +93,21 @@
 
                 let files = e.target.files || e.dataTransfer.files;
 
-                for(let i = 0; i < files.length; i++){
+                for (let i = 0; i < files.length; i++) {
 
-                    this.image[this.index] = {
+                    Vue.set(this.images, this.index, {
                         'bad_size': false,
                         'bad_type': false,
                         'uploaded': false,
                         'src': null,
                         'percent': false,
-                    }
+                    })
 
                     if((files[i].size * 0.001) > this.max_filesize) {
-                        this.image[this.index]['bad_size'] = true;
+                        this.images[this.index]['bad_size'] = true;
                         console.log('bad_size');
-                    } else if (! /\.(jpe?g|png|gif)$/i.test( files[i].name ) ) {
-                        this.image[this.index]['bad_type'] = true;
+                    } else if (! /\.(jpe?g|png)$/i.test( files[i].name ) ) {
+                        this.images[this.index]['bad_type'] = true;
                         console.log('bad_type');
                     } else {
                         this._xhr(files[i], this.index);

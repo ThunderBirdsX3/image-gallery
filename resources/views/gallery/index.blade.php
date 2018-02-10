@@ -9,7 +9,7 @@
 
                     <div class="card-body">
 
-                        <upload-image-component></upload-image-component>
+                        <upload-image-component :galleries="{{ $galleries }}"></upload-image-component>
 
                     </div>
                 </div>
