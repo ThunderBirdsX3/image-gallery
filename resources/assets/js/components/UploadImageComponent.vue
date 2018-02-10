@@ -11,8 +11,8 @@
         <div class="upload-image-thumbnails row">
             <div v-for="(image, index) in images" class="col-md-4">
 
-                <div class="upload-image-thumbnail" v-bind:class="{ 'uploaded': image.src != null }">
-
+                <div class="upload-image-thumbnail">
+                    {{ index }}
                     <div class="btn-group" v-if="image.src != null">
                         <a v-bind:href="url + '/' + image.src" v-bind:data-lightbox="image.src" class="btn btn-info btn-sm">
                             <i class="material-icons">zoom_in</i>
@@ -37,6 +37,9 @@
                     </div>
                     <div v-else-if="image.src != null">
                         <img v-bind:src="url + '/' + image.src" class="show">
+                    </div>
+                    <div v-else class="progress">
+                        <progress max="100" :value.prop="image.percent"></progress>
                     </div>
 
                 </div>
@@ -70,12 +73,6 @@
                 e.preventDefault(); e.stopPropagation();
             }));
 
-            ['dragover', 'dragenter']
-            .forEach(event => this.form.addEventListener(event, this.dragEnter));
-
-            ['dragleave', 'dragend', 'drop']
-            .forEach(event => this.form.addEventListener(event, this.dragLeave));
-
             ['drop']
             .forEach(event => this.form.addEventListener(event, this.fileDrop));
 
@@ -97,14 +94,14 @@
                         'Content-Type': 'multipart/form-data'
                     },
                     onUploadProgress: function( progressEvent ) {
-                        // this.uploadPercentage = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
+                        this.images[index]['percent'] = parseInt( Math.round( ( progressEvent.loaded * 100 ) / progressEvent.total ) );
                     }.bind(this)
                 })
                 .then((response) => {
 
+                    this.images[index]['id'] = response.data.id;
                     this.images[index]['src'] = response.data.src;
                     this.images[index]['uploaded'] = true;
-                    console.log(this.images);
 
                 })
                 .catch((error) => {
@@ -112,14 +109,6 @@
                 });
             },
 
-            dragEnter: function(e){
-                e.preventDefault();
-                this.onDragover = true;
-            },
-            dragLeave: function(e){
-                e.preventDefault();
-                this.onDragover = false;
-            },
             fileDrop: function(e){
                 e.preventDefault();
 
@@ -134,6 +123,7 @@
                         'src': null,
                         'percent': false,
                         'name': files[i].name,
+                        'percent': 0,
                     })
 
                     if((files[i].size * 0.001) > this.max_filesize) {
@@ -153,15 +143,16 @@
             },
 
             removeImage: function(id, index){
+
+                console.log('Remove', id, index)
+
                 if (id != null) {
                     axios.delete(route('gallery.destroy', id))
-                    .then(response => {
-                        Vue.delete(this.images, index);
-                    })
                     .catch(error => console.error(error));
-                } else {
-                    Vue.delete(this.images, index);
                 }
+
+                Vue.delete(this.images, index);
+                this.index--;
             }
         }
     }
@@ -270,5 +261,10 @@
         i {
             font-size: 100px
         }
+    }
+
+    progress {
+        text-align: center;
+        width: 100%;
     }
 </style>

@@ -52,14 +52,17 @@ class GalleryController extends Controller
         $file_path = "$file_path[0]/$file_path[1]/$file_path[2]/";
         $file_path = $request->image->store($file_path, 'public');
 
-        Auth::user()->Gallery()->create([
+        $gallery = Auth::user()->Gallery()->create([
             'src' => $src,
             'file_path' => $file_path,
             'file_type' => $file_type,
             'file_size' => $file_size,
         ]);
 
-        return response()->json(['src' => $src], 200);
+        return response()->json([
+            'id' => $gallery->id,
+            'src' => $src
+        ], 200);
     }
 
     /**
